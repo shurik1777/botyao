@@ -21,13 +21,14 @@ async def start_cmd(message: types.Message) -> None:  # Пишем хендле�
 
 @dp.message()  # Нужно учитывать очередность в системе фильтрации
 async def echo(message: types.Message) -> None:
-    text: str | None = message.text
-    if text in ['Привет', 'привет', 'hi', 'hello']:
-        await message.answer('И тебе привет!')
-    elif text in ['Пока', 'пока', 'пакеда', 'До свидания']:
-        await message.answer('И тебе покеда!')
-    else:
-        await message.answer(message.text)
+    # text: str | None = message.text
+    # if text in ['Привет', 'привет', 'hi', 'hello']:
+    #     await message.answer('И тебе привет!')
+    # elif text in ['Пока', 'пока', 'пакеда', 'До свидания']:
+    #     await message.answer('И тебе пакеда!')
+    # else:
+    #     await message.answer(message.text)
+    await message.answer(message.text)
 
 
 async def on_startup() -> None:  # Все функции асинхронны ходят по кругу и не ждут очередь на выполнения
