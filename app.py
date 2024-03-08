@@ -1,38 +1,25 @@
+"""Точка входа начиная с 3-й лекции"""
 import asyncio
-import os  # импортирована как зависимость для dotenv-python
+import os
 
-from aiogram import Bot, Dispatcher, types  # Все те 1е импорты без которых не будут работать самые первые шаги
-from dotenv import find_dotenv, load_dotenv  # Тут импортировал библиотеку для того, что бы спрятать токен
-from aiogram.filters import \
-    CommandStart  # Через фильтры импортируем специальный класс который указывает хендлеру кого поедать
+from aiogram import Bot, Dispatcher
+from dotenv import find_dotenv, load_dotenv
+from handlers.user_private import user_private_router
 
-"""Ниже две строки отвечают 1е за подгрузку локальную токена через который БОТ подключается к API телеграмма"""
 load_dotenv(find_dotenv())
+
+
+ALLOWED_UPDATES = ['message, edited_message']
+
 bot = Bot(token=os.getenv('TOKEN'))
+dp = Dispatcher()
 
-dp = Dispatcher()  # Обработчик - как КПП или Дверь обрабатывает все что прилетает от бота
-
-
-# @dp.message()  # Символ ЭД = @ - собака! ХЭндлер с пустым значением в скобках - будет реагировать на все события отправленные ему
-@dp.message(CommandStart())
-async def start_cmd(message: types.Message) -> None:  # Пишем хендлер который будет хватать розовой шупальцой событие
-    await message.answer('Это была команда старт')
+dp.include_router(user_private_router)
 
 
-@dp.message()  # Нужно учитывать очередность в системе фильтрации
-async def echo(message: types.Message) -> None:
-    # text: str | None = message.text
-    # if text in ['Привет', 'привет', 'hi', 'hello']:
-    #     await message.answer('И тебе привет!')
-    # elif text in ['Пока', 'пока', 'пакеда', 'До свидания']:
-    #     await message.answer('И тебе пакеда!')
-    # else:
-    #     await message.answer(message.text)
-    await message.answer(message.text)
+async def main() -> None:
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot, allowed_updates=ALLOWED_UPDATES)
 
 
-async def on_startup() -> None:  # Все функции асинхронны ходят по кругу и не ждут очередь на выполнения
-    await dp.start_polling(bot)
-
-
-asyncio.run(on_startup())
+asyncio.run(main())
