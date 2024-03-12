@@ -1,6 +1,6 @@
 """Точка входа начиная с 3-й лекции"""
 import asyncio
-import os
+from os import getenv  # Переделал под pycharm в виртуальное окружение
 
 from aiogram import Bot, Dispatcher
 from dotenv import find_dotenv, load_dotenv
@@ -11,7 +11,7 @@ load_dotenv(find_dotenv())
 
 ALLOWED_UPDATES = ['message, edited_message']
 
-bot = Bot(token=os.getenv('TOKEN'))
+bot = Bot(token=getenv('TOKEN'))  # Тоже редакция вместо os.getenv - сразу getenv
 dp = Dispatcher()
 
 dp.include_router(user_private_router)
