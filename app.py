@@ -3,6 +3,7 @@ import asyncio
 from os import getenv  # Переделал под pycharm в виртуальное окружение
 
 from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
 from aiogram.types import BotCommandScopeAllPrivateChats
 from dotenv import find_dotenv, load_dotenv
 
@@ -13,7 +14,7 @@ load_dotenv(find_dotenv())
 
 ALLOWED_UPDATES = ['message, edited_message']
 
-bot = Bot(token=getenv('TOKEN'))  # Тоже редакция вместо os.getenv - сразу getenv
+bot = Bot(token=getenv('TOKEN'), parse_mode=ParseMode.HTML)  # Тоже редакция вместо os.getenv - сразу getenv
 dp = Dispatcher()
 
 dp.include_router(user_private_router)
