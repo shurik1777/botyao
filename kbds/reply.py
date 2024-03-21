@@ -11,7 +11,8 @@ start_kb = ReplyKeyboardMarkup(
         [
             KeyboardButton(text='Варианты доставки'),
             KeyboardButton(text='Варианты оплаты'),
-        ]
+        ],
+
     ],
     resize_keyboard=True,
     input_field_placeholder='Что Вас интересует?'
@@ -25,6 +26,21 @@ start_kb2.add(
     KeyboardButton(text='О магазине'),
     KeyboardButton(text='Варианты доставки'),
     KeyboardButton(text='Варианты оплаты'),
+    KeyboardButton(text='Валюта в рублях'),
+    KeyboardButton(text='Бились сражались'),
+    KeyboardButton(text='Отнюдь не нужная информация'),
+    KeyboardButton(text='Средний класс'),
+    KeyboardButton(text='Ежики и Шарфики'),
+    KeyboardButton(text='Смурфики и Голубика'),
+    KeyboardButton(text='Поднимались тысячу раз'),
+    KeyboardButton(text='Средний чек'),
+    KeyboardButton(text='Дух борьбы не угас'),
+    KeyboardButton(text='woodworking'),
+    KeyboardButton(text='Строгий ерш'),
+    KeyboardButton(text='То что будет'),
+    KeyboardButton(text='Сейчас и здесь'),
+    KeyboardButton(text='Не забудет моя земля'),
+    KeyboardButton(text='Пала моя империя'),
 )
 start_kb2.adjust(2, 2)
 
