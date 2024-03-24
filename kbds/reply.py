@@ -6,7 +6,7 @@ def get_keyboard(
     placeholder: str = None,
     request_contact: int = None,
     request_location: int = None,
-    sizes: tuple[int] = (2,),
+    sizes: tuple = (2,),
 ):
     """
     Parameters request_contact and request_location must be as indexes of btns args for buttons you need.

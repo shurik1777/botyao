@@ -2,7 +2,9 @@ from aiogram import F, Router, types
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from database.models import Product
 from filters.chat_types import ChatTypeFilter, IsAdmin
 from kbds.reply import get_keyboard
 
@@ -97,7 +99,7 @@ async def add_name(message: types.Message, state: FSMContext):
     await state.set_state(AddProduct.description)
 
 
-@admin_router.message(AddProduct.name, F.text)
+@admin_router.message(AddProduct.name)
 async def add_name(message: types.Message, state: FSMContext):
     await message.answer("Вы ввели не допустимые данные, введите текст названия товара")
 
@@ -109,7 +111,7 @@ async def add_description(message: types.Message, state: FSMContext):
     await state.set_state(AddProduct.price)
 
 
-@admin_router.message(AddProduct.description, F.text)
+@admin_router.message(AddProduct.description)
 async def add_description(message: types.Message, state: FSMContext):
     await message.answer("Вы ввели не допустимые данные, введите текст названия товара")
 
@@ -121,15 +123,29 @@ async def add_price(message: types.Message, state: FSMContext):
     await state.set_state(AddProduct.image)
 
 
-@admin_router.message(AddProduct.price, F.text)
+@admin_router.message(AddProduct.price)
 async def add_price(message: types.Message, state: FSMContext):
     await message.answer("Вы ввели не допустимые данные, введите текст названия товара")
 
 
+# Ловим данные для состояния image и потом выходом из состояний
 @admin_router.message(AddProduct.image, F.photo)
-async def add_image(message: types.Message, state: FSMContext):
-    await state.update_data(imege=message.photo[-1].file_id)
+async def add_image(message: types.Message, state: FSMContext, session: AsyncSession):
+    await state.update_data(image=message.photo[-1].file_id)
     await message.answer("Товар добавлен", reply_markup=ADMIN_KB)
     data = await state.get_data()
     await message.answer(str(data))
+    obj = Product(
+        name=data['name'],
+        description=data['description'],
+        price=float(data['price']),
+        image=data['image'],
+    )
+    session.add(obj)
+    await session.commit()
     await state.clear()
+
+
+@admin_router.message(AddProduct.image)
+async def add_image(message: types.Message, state: FSMContext):
+    await message.answer("Отправить фото пищи")
